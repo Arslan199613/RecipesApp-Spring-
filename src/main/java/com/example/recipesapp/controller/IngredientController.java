@@ -3,11 +3,13 @@ package com.example.recipesapp.controller;
 import com.example.recipesapp.model.Ingredient;
 import com.example.recipesapp.model.Recipe;
 import com.example.recipesapp.services.IngredientService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/ingredient")
+@Tag(name = "Ингридиенты",description = "CRUD-операции и другие эндпоинты для работы с ингридиентами")
 
 public class IngredientController {
     private final IngredientService ingredientService;
