@@ -17,10 +17,9 @@ public class RecipeController {
     }
 
     @PostMapping
-    public ResponseEntity createRecipe(@RequestBody Recipe recipe) {
-        Recipe createdRecipes = recipeService.createRecipes(recipe);
-        return ResponseEntity.ok(createdRecipes);
-
+    public ResponseEntity<Integer> createRecipe(@RequestBody Recipe recipe) {
+        Integer recipeId = recipeService.createRecipes(recipe);
+        return ResponseEntity.ok(recipeId);
     }
 
     @GetMapping("/{recipeId}")

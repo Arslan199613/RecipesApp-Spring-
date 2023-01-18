@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,9 +23,9 @@ public class Recipe {
     @Min(value = 0, message = "Количество времени должно быть больше,чем 0")
     private int time;
     @NotEmpty(message = "Лист не может быть пустым")
-    private static List<Ingredient> list;
+    List<Ingredient> list;
     @NotEmpty(message = "Шаги не могут быть пустым")
-    private static List<String> steps;
+    List<String> steps;
 }
 
 

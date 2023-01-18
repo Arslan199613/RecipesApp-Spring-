@@ -2,7 +2,7 @@ package com.example.recipesapp.services;
 import com.example.recipesapp.model.Recipe;
 
 public interface RecipeService {
-    Recipe createRecipes(Recipe recipe);
+    Integer createRecipes(Recipe recipe);
 
     Recipe editRecipe(Integer recipeId, Recipe recipe);
 

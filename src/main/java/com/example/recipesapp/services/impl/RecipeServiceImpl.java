@@ -2,20 +2,18 @@ package com.example.recipesapp.services.impl;
 import com.example.recipesapp.model.Recipe;
 import com.example.recipesapp.services.RecipeService;
 import org.springframework.stereotype.Service;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TreeMap;
+
+import java.util.*;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
-    private static Map<Integer, Recipe> recipeMap = new HashMap<>();
-    private Integer recipeId = 1;
+    private static Map<Integer, Recipe> recipeMap = new TreeMap<>();
+    private static Integer recipeId = 0;
 
     @Override
-    public Recipe createRecipes(Recipe recipe) {
+    public Integer createRecipes(Recipe recipe) {
         recipeMap.put(recipeId, recipe);
-        recipeId++;
-        return recipe;
+        return recipeId++;
     }
 
     @Override
