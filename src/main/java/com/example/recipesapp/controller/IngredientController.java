@@ -17,9 +17,9 @@ public class IngredientController {
     }
 
     @PostMapping
-    public ResponseEntity createIngredient(@RequestBody Ingredient ingredient) {
-        Ingredient createdIngredient = ingredientService.createIngredient(ingredient);
-        return ResponseEntity.ok(createdIngredient);
+    public ResponseEntity<Integer> createIngredient(@RequestBody Ingredient ingredient) {
+        Integer ingredientId = ingredientService.createIngredient(ingredient);
+        return ResponseEntity.ok(ingredientId);
 
       }
 

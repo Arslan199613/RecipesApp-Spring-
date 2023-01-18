@@ -2,7 +2,7 @@ package com.example.recipesapp.services;
 import com.example.recipesapp.model.Ingredient;
 
 public interface IngredientService {
-    Ingredient createIngredient(Ingredient ingredient);
+    Integer createIngredient(Ingredient ingredient);
 
     Ingredient getIngredientId(Integer ingredientId);
 

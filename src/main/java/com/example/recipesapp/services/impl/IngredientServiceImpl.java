@@ -9,11 +9,11 @@ import java.util.TreeMap;
 @Service
 public class IngredientServiceImpl implements IngredientService {
     private static Map<Integer, Ingredient> ingredientMap = new HashMap<>();
-    private Integer ingredientId = 1;
+    private static Integer ingredientId = 0;
     @Override
-    public Ingredient createIngredient(Ingredient ingredient) {
-        ingredientMap.put(ingredientId++, ingredient);
-        return ingredient;
+    public Integer createIngredient(Ingredient ingredient) {
+        ingredientMap.put(ingredientId, ingredient);
+        return ingredientId++;
     }
     @Override
     public Ingredient editIngredient(Integer ingredientId, Ingredient ingredient) {
