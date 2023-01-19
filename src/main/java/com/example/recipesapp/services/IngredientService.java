@@ -12,6 +12,6 @@ public interface IngredientService {
 
     void deleteAllIngredient();
 
-    Ingredient getAllIngredient();
+    void getAllIngredient();
 }
 

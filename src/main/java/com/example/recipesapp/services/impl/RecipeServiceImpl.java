@@ -31,23 +31,20 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public boolean deleteRecipe(Integer recipeId) {
-        if (recipeMap.containsKey(recipeId)) {
-            recipeMap.remove(recipeId);
-            return true;
-        }
-        return false;
+        var removed = recipeMap.remove(recipeId);
+        return removed != null;
     }
     @Override
     public void deleteAllRecipe() {
-        recipeMap = new TreeMap<>();
+        recipeMap.clear();
     }
 
     @Override
-    public Recipe getAllRecipe() {
-        for (Recipe recipe : recipeMap.values()) {
-            return recipe;
+    public void getAllRecipe() {
+        for (Recipe value : recipeMap.values()) {
+            System.out.println(value);
         }
-        return null;
     }
 }
+
 

@@ -13,7 +13,7 @@ public interface RecipeService {
 
     void deleteAllRecipe();
 
-    Recipe getAllRecipe();
+   void getAllRecipe();
 }
 
 

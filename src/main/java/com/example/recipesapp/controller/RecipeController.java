@@ -57,11 +57,8 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity getAllResipeId() {
-        Recipe recipe = recipeService.getAllRecipe();
-        if (recipe == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(recipe);
+    public ResponseEntity getAllResipe() {
+        recipeService.getAllRecipe();
+        return ResponseEntity.ok().build();
     }
 }

@@ -57,11 +57,8 @@ public class IngredientController {
 
     @GetMapping
     public ResponseEntity getAllIngredientId() {
-        Ingredient ingredient = ingredientService.getAllIngredient();
-        if (ingredient == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(ingredient);
+        ingredientService.getAllIngredient();
+        return ResponseEntity.ok().build();
     }
 }
 

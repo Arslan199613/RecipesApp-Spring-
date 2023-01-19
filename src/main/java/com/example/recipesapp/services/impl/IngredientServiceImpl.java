@@ -38,14 +38,13 @@ public class IngredientServiceImpl implements IngredientService {
     }
     @Override
     public void deleteAllIngredient() {
-        ingredientMap = new TreeMap<>();
+        ingredientMap.clear();
     }
 
     @Override
-    public Ingredient getAllIngredient() {
+    public void getAllIngredient() {
         for (Ingredient ingredient : ingredientMap.values()) {
-            return ingredient;
+            System.out.println(ingredient);
         }
-        return null;
     }
 }
