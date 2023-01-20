@@ -9,6 +9,7 @@ import java.util.*;
 public class RecipeServiceImpl implements RecipeService {
     private static Map<Integer, Recipe> recipeMap = new TreeMap<>();
     private static Integer recipeId = 0;
+    
 
     @Override
     public Integer createRecipes(Recipe recipe) {
@@ -40,11 +41,11 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void getAllRecipe() {
-        for (Recipe value : recipeMap.values()) {
-            System.out.println(value);
+    public Collection <Recipe> getAllRecipe() {
+        return recipeMap.values();
         }
     }
-}
+
+
 
 

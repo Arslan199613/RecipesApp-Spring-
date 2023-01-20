@@ -2,9 +2,10 @@ package com.example.recipesapp.services.impl;
 import com.example.recipesapp.model.Ingredient;
 import com.example.recipesapp.services.IngredientService;
 import org.springframework.stereotype.Service;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
@@ -42,9 +43,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public void getAllIngredient() {
-        for (Ingredient ingredient : ingredientMap.values()) {
-            System.out.println(ingredient);
-        }
+    public Collection <Ingredient> getAllIngredients() {
+        return ingredientMap.values();
     }
 }

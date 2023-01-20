@@ -7,6 +7,8 @@ import lombok.NonNull;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/recipe")
 @Tag(name = "Рецепты",description = "CRUD-операции и другие эндпоинты для работы с рецептами")
@@ -57,8 +59,11 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity getAllResipe() {
-        recipeService.getAllRecipe();
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Collection<Recipe>> getAllResipe() {
+        Collection<Recipe> allRecipe = recipeService.getAllRecipe();
+        if (allRecipe == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(allRecipe);
     }
 }

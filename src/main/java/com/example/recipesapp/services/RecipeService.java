@@ -1,6 +1,8 @@
 package com.example.recipesapp.services;
 import com.example.recipesapp.model.Recipe;
 
+import java.util.Collection;
+
 public interface RecipeService {
     Integer createRecipes(Recipe recipe);
 
@@ -13,7 +15,7 @@ public interface RecipeService {
 
     void deleteAllRecipe();
 
-   void getAllRecipe();
+    Collection<Recipe> getAllRecipe();
 }
 
 

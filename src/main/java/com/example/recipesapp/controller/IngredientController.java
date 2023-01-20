@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+
 @RestController
 @RequestMapping("/ingredient")
 @Tag(name = "Ингридиенты",description = "CRUD-операции и другие эндпоинты для работы с ингридиентами")
@@ -56,9 +58,11 @@ public class IngredientController {
     }
 
     @GetMapping
-    public ResponseEntity getAllIngredientId() {
-        ingredientService.getAllIngredient();
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Collection<Ingredient>> getAllResipe() {
+        Collection<Ingredient> allIngredients = ingredientService.getAllIngredients();
+        if (allIngredients == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(allIngredients);
     }
 }
-
