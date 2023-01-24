@@ -27,13 +27,13 @@ public class IngredientController {
 
       }
 
-    @GetMapping("{ingredientId}")
+    @GetMapping("/{ingredientId}")
     public ResponseEntity getIngredientId(@PathVariable Integer ingredientId) {
         Ingredient ingredient = ingredientService.getIngredientId(ingredientId);
         if (ingredient == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(ingredientId);
+        return ResponseEntity.ok(ingredient);
     }
 
     @DeleteMapping("/{ingredientId}")

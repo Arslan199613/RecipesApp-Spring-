@@ -1,6 +1,7 @@
 package com.example.recipesapp.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.validation.annotation.Validated;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Recipe {
 
     @NotEmpty(message = "Имя не может быть пустым")
