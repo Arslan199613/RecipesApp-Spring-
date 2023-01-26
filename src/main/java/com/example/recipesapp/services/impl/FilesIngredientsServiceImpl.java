@@ -4,6 +4,7 @@ import com.example.recipesapp.services.FilesIngredientsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,14 +30,21 @@ public class FilesIngredientsServiceImpl implements FilesIngredientsService {
     @Override
     public String readFromFile() {
         try {
-            return Files.readString(Path.of(dataFile2Path,dataFile2Name));
+            return Files.readString(Path.of(dataFile2Path, dataFile2Name));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-    private boolean cleanDataFile() {
+
+    @Override
+    public File getDataFile() {
+        return new File(dataFile2Path + "/" + dataFile2Name);
+    }
+
+    @Override
+    public boolean cleanDataFile() {
         try {
-            Path path = Path.of(dataFile2Path,dataFile2Name);
+            Path path = Path.of(dataFile2Path, dataFile2Name);
             Files.deleteIfExists(path);
             Files.createFile(path);
             return true;
