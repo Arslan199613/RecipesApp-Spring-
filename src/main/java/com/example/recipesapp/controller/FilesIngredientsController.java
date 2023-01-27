@@ -20,7 +20,7 @@ public class FilesIngredientsController {
     public FilesIngredientsController(FilesIngredientsService filesIngredientsService) {
         this.filesIngredientsService = filesIngredientsService;
     }
-    @GetMapping("/export")
+    @GetMapping("/import")
 
     public ResponseEntity<InputStreamResource> downloadDataFile() throws FileNotFoundException {
         File file = filesIngredientsService.getDataFile();
@@ -38,7 +38,7 @@ public class FilesIngredientsController {
         }
     }
 
-    @PostMapping(value = "/import",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/export",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadDataFile(@RequestParam MultipartFile file) {
         filesIngredientsService.cleanDataFile();
         File dataFile = filesIngredientsService.getDataFile();
