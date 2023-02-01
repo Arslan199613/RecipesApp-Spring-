@@ -37,7 +37,6 @@ public class FilesIngredientsController {
             return ResponseEntity.noContent().build();
         }
     }
-
     @PostMapping(value = "/export",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> uploadDataFile(@RequestParam MultipartFile file) {
         filesIngredientsService.cleanDataFile();
@@ -48,7 +47,6 @@ public class FilesIngredientsController {
             IOUtils.copy(file.getInputStream(),fos);
             return ResponseEntity.ok().build();
         } catch (IOException e) {
-            e.printStackTrace();
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 

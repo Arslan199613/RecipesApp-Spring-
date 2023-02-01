@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Collection;
 
 @RestController
@@ -21,7 +22,7 @@ public class IngredientController {
     }
 
     @PostMapping
-    public ResponseEntity<Integer> createIngredient(@RequestBody Ingredient ingredient) {
+    public ResponseEntity<Integer> createIngredient(@Valid @RequestBody Ingredient ingredient) {
         Integer ingredientId = ingredientService.createIngredient(ingredient);
         return ResponseEntity.ok(ingredientId);
 
@@ -44,7 +45,7 @@ public class IngredientController {
         return ResponseEntity.notFound().build();
     }
     @PutMapping("/{ingredientId}")
-    public ResponseEntity editIngtedient(@PathVariable Integer ingredientId, @RequestBody Ingredient ingredient) {
+    public ResponseEntity editIngtedient(@PathVariable Integer ingredientId,@Valid @RequestBody Ingredient ingredient) {
         Ingredient ingredient1 = ingredientService.editIngredient(ingredientId, ingredient);
         if (ingredient1== null) {
             return ResponseEntity.notFound().build();

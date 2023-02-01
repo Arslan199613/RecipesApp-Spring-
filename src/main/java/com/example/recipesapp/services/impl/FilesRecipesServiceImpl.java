@@ -27,9 +27,15 @@ public class FilesRecipesServiceImpl implements FilesRecipesService {
         } catch (IOException e) {
             return false;
         }
-
     }
-
+    @Override
+    public Path createTempFile(String suffix) {
+        try {
+            return Files.createTempFile(Path.of(dataFilePath), "tempFile", suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @Override
     public String readFromFile() {
         try {
@@ -56,4 +62,5 @@ public class FilesRecipesServiceImpl implements FilesRecipesService {
             return false;
         }
     }
+
 }

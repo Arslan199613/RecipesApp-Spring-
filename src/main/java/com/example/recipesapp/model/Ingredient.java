@@ -1,25 +1,24 @@
 package com.example.recipesapp.model;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Ingredient {
 
-    @NotEmpty(message = "Имя не может быть пустым")
-    @Size(min = 2, max = 10, message = "Имя должно быть в диапазоне от 2 до 10")
+    @NotBlank(message = "Имя не может быть пустым")
     private String name;
-    @Min(value = 0, message = "Количество должно быть больше,чем 0")
+    @Positive
     private int sum;
-    @NotEmpty(message = "Единица измерения не может быть пустым")
     private String unit;
+
+    @Override
+    public String toString() {
+        return name + " " + " " + sum + " " + unit;
+    }
 }
 
 

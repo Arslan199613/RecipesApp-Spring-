@@ -22,12 +22,14 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientServiceImpl(FilesIngredientsService filesIngredientsService) {
         this.filesIngredientsService = filesIngredientsService;
     }
-
     @PostConstruct
     private void init() {
-        readToFile();
+        try {
+            readToFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-
     @Override
     public Integer createIngredient(Ingredient ingredient) {
         ingredientMap.put(ingredientId, ingredient);

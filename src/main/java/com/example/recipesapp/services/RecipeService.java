@@ -1,6 +1,8 @@
 package com.example.recipesapp.services;
 import com.example.recipesapp.model.Recipe;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 
 public interface RecipeService {
@@ -16,6 +18,8 @@ public interface RecipeService {
     void deleteAllRecipe();
 
     Collection<Recipe> getAllRecipe();
+
+    Path createReport() throws IOException;
 }
 
 
