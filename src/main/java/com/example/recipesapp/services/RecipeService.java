@@ -13,7 +13,7 @@ public interface RecipeService {
     Recipe getRecipesId(Integer recipeId);
 
 
-    boolean deleteRecipe(Integer recipeId);
+    Recipe deleteRecipe(Integer recipeId);
 
     void deleteAllRecipe();
 

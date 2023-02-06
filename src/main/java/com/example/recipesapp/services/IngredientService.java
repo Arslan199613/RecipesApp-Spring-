@@ -10,7 +10,7 @@ public interface IngredientService {
 
     Ingredient editIngredient(Integer ingredientId, Ingredient ingredient);
 
-    boolean deleteIngredient(Integer ingredientId);
+    Ingredient deleteIngredient(Integer ingredientId);
 
     void deleteAllIngredient();
 

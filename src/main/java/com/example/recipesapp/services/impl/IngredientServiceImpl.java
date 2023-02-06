@@ -1,4 +1,5 @@
 package com.example.recipesapp.services.impl;
+import com.example.recipesapp.exception.FileProcessingException;
 import com.example.recipesapp.model.Ingredient;
 import com.example.recipesapp.services.FilesIngredientsService;
 import com.example.recipesapp.services.IngredientService;
@@ -6,8 +7,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.webjars.NotFoundException;
 
 import javax.annotation.PostConstruct;
+import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,40 +27,41 @@ public class IngredientServiceImpl implements IngredientService {
         this.filesIngredientsService = filesIngredientsService;
     }
     @PostConstruct
-    private void init() {
-        try {
-            readToFile();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void init() throws FileProcessingException {
+        readToFile();
     }
     @Override
     public Integer createIngredient(Ingredient ingredient) {
-        ingredientMap.put(ingredientId, ingredient);
+        ingredientMap.put(ingredientId++, ingredient);
         saveToFile();
-        return ingredientId++;
+        return ingredientId;
     }
     @Override
     public Ingredient editIngredient(Integer ingredientId, Ingredient ingredient) {
-        if (ingredientMap.containsKey(ingredientId)) {
-            ingredientMap.put(ingredientId, ingredient);
-            saveToFile();
-            return ingredient;
+        if (!ingredientMap.containsKey(ingredientId)) {
+            throw new NotFoundException("Ингридиент с заданным id не найден");
         }
-        return null;
+        Ingredient put = ingredientMap.put(ingredientId, ingredient);
+        saveToFile();
+        return put;
+
     }
     @Override
     public Ingredient getIngredientId(Integer ingredientId) {
+        if (!ingredientMap.containsKey(ingredientId)) {
+            throw new NotFoundException("Ингридиент с заданным id не найден");
+        }
         return ingredientMap.get(ingredientId);
     }
 
     @Override
-    public boolean deleteIngredient(Integer ingredientId) {
-        if (ingredientMap.containsKey(ingredientId)) {
-            ingredientMap.remove(ingredientId);
-            return true;
-        }
-        return false;
+    public Ingredient deleteIngredient(Integer ingredientId) {
+            if (!ingredientMap.containsKey(ingredientId)) {
+                throw new NotFoundException("Ингридиент с заданным id не найден");
+            }
+            Ingredient removeIngredient = ingredientMap.remove(ingredientId);
+            saveToFile();
+            return removeIngredient;
     }
     @Override
     public void deleteAllIngredient() {
@@ -67,23 +72,23 @@ public class IngredientServiceImpl implements IngredientService {
     public Collection <Ingredient> getAllIngredients() {
         return ingredientMap.values();
     }
-    private void saveToFile() {
+    private void saveToFile() throws FileProcessingException {
         try {
             String json = new ObjectMapper().writeValueAsString(ingredientMap);
             filesIngredientsService.saveToFile(json);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new FileProcessingException("Файл не удалось найти");
         }
 
     }
 
-    private void readToFile() {
+    private void readToFile() throws FileProcessingException {
         try {
             String json = filesIngredientsService.readFromFile();
-            ingredientMap= new ObjectMapper().readValue(json, new TypeReference<TreeMap<Integer, Ingredient>>() {
+            ingredientMap = new ObjectMapper().readValue(json, new TypeReference<TreeMap<Integer, Ingredient>>() {
             });
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new FileProcessingException("Файл не удалось прочитать");
         }
     }
 }

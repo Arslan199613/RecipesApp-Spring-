@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,7 +26,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/recipe")
-@Tag(name = "Рецепты",description = "CRUD-операции и другие эндпоинты для работы с рецептами")
+@Tag(name = "Рецепты", description = "CRUD-операции и другие эндпоинты для работы с рецептами")
 
 public class RecipeController {
     private final RecipeService recipeService;
@@ -34,8 +35,12 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
+
     @PostMapping
-    public ResponseEntity<Integer> createRecipe(@RequestBody Recipe recipe) {
+    @Operation(
+            summary = "Загрузка рецептов"
+    )
+    public ResponseEntity<Integer> createRecipe(@Valid @RequestBody Recipe recipe) {
         Integer recipeId = recipeService.createRecipes(recipe);
         return ResponseEntity.ok(recipeId);
     }
@@ -66,14 +71,20 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{recipeId}")
+    @Operation(
+            summary = "Удаление рецептов по id",
+            description = "Вводим id "
+    )
     public ResponseEntity<Void> deleteRecipe(@PathVariable Integer recipeId) {
-        if (recipeService.deleteRecipe(recipeId)) {
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
+        recipeService.deleteRecipe(recipeId);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{recipeId}")
+    @Operation(
+            summary = "Изменение рецептов",
+            description = "Вводим id и заполняем структуру "
+    )
     public ResponseEntity editRecipe(@PathVariable Integer recipeId, @RequestBody Recipe recipe) {
         Recipe recipe1 = recipeService.editRecipe(recipeId, recipe);
         if (recipe1 == null) {
@@ -83,11 +94,18 @@ public class RecipeController {
     }
 
     @DeleteMapping
+    @Operation(
+            summary = "Удаление всех рецептов"
+    )
+
     public ResponseEntity<Void> deleteAllRecipe() {
         recipeService.deleteAllRecipe();
         return ResponseEntity.ok().build();
     }
-    @GetMapping
+    @GetMapping()
+    @Operation(
+            summary = "Получение всех рецептов"
+    )
     public ResponseEntity<Collection<Recipe>> getAllResipe() {
         Collection<Recipe> allRecipe = recipeService.getAllRecipe();
         if (allRecipe == null) {
@@ -96,6 +114,9 @@ public class RecipeController {
         return ResponseEntity.ok(allRecipe);
     }
     @GetMapping("/recipeReport")
+    @Operation(
+            summary = "Получение рецептов в формате txt"
+    )
     public ResponseEntity<InputStreamResource> getRecipesReport() throws FileNotFoundException {
         try {
             Path path = recipeService.createReport();

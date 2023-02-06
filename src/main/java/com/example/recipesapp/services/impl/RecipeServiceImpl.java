@@ -1,4 +1,5 @@
 package com.example.recipesapp.services.impl;
+import com.example.recipesapp.exception.FileProcessingException;
 import com.example.recipesapp.model.Ingredient;
 import com.example.recipesapp.model.Recipe;
 import com.example.recipesapp.services.FilesRecipesService;
@@ -8,9 +9,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.webjars.NotFoundException;
 import javax.annotation.PostConstruct;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -23,7 +25,7 @@ public class RecipeServiceImpl implements RecipeService {
     private static Map<Integer, Recipe> recipeMap = new TreeMap<>();
     private static Integer recipeId = 0;
 
-    private FilesRecipesService filesService;
+    private final FilesRecipesService filesService;
 
     public RecipeServiceImpl(FilesRecipesService filesService) {
         this.filesService = filesService;
@@ -47,23 +49,31 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe editRecipe(Integer recipeId, Recipe recipe) {
-        if (recipeMap.containsKey(recipeId)) {
-            recipeMap.put(recipeId, recipe);
-            saveToFile();
-            return recipe;
+        if (!recipeMap.containsKey(recipeId)) {
+            throw new NotFoundException("Рецепт с заданным id не найден");
         }
-        return null;
+        Recipe put = recipeMap.put(recipeId, recipe);
+        saveToFile();
+        return put;
+        
     }
 
     @Override
     public Recipe getRecipesId(Integer recipeId) {
+        if (!recipeMap.containsKey(recipeId)) {
+            throw new NotFoundException("Рецепт с заданным id не найден");
+        }
         return recipeMap.get(recipeId);
     }
 
     @Override
-    public boolean deleteRecipe(Integer recipeId) {
-        var removed = recipeMap.remove(recipeId);
-        return removed != null;
+    public Recipe deleteRecipe(Integer recipeId) {
+        if (!recipeMap.containsKey(recipeId)) {
+            throw new FileProcessingException("Рецепт с заданным id не найден");
+        }
+        Recipe remove = recipeMap.remove(recipeId);
+        saveToFile();
+        return remove;
     }
 
     @Override
@@ -94,7 +104,7 @@ public class RecipeServiceImpl implements RecipeService {
                         .append(String.valueOf(recipes.getTime())).append(" минут").append("\n").append(" Ингридиенты: \n")
                         .append(ingredients.toString()).append(" Инструкция: ")
                         .append(instructions.toString());
-                writer.append("\n\n");
+                writer.append("\n\r");
             }
         }
         return recipesText;
@@ -106,7 +116,7 @@ public class RecipeServiceImpl implements RecipeService {
             String json = new ObjectMapper().writeValueAsString(dataFile);
             filesService.saveToFile(json);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new FileProcessingException("Файл не удалось найти");
         }
     }
 
@@ -118,12 +128,13 @@ public class RecipeServiceImpl implements RecipeService {
             recipeId = dataFile.getRecipeId();
             recipeMap = dataFile.getRecipeMap();
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            throw new FileProcessingException("Файл не удалось прочитать");
         }
     }
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @EqualsAndHashCode
     private static class DataFile {
         private int recipeId;
         private Map<Integer, Recipe> recipeMap;

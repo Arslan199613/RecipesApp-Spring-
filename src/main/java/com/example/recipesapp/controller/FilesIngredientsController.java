@@ -1,6 +1,8 @@
 package com.example.recipesapp.controller;
 
 import com.example.recipesapp.services.FilesIngredientsService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -14,43 +16,29 @@ import java.io.*;
 
 @RestController
 @RequestMapping("/filesWithIngredients")
+@Tag(name="Files",description = "Crud-операции для работы с файлами")
 public class FilesIngredientsController {
     private FilesIngredientsService filesIngredientsService;
 
     public FilesIngredientsController(FilesIngredientsService filesIngredientsService) {
         this.filesIngredientsService = filesIngredientsService;
     }
-    @GetMapping("/import")
-
-    public ResponseEntity<InputStreamResource> downloadDataFile() throws FileNotFoundException {
+    @GetMapping("/export")
+        @Operation(description = "Экспорт файла ингридиентов")
+    public ResponseEntity<InputStreamResource> downloadDataFile() throws IOException {
         File file = filesIngredientsService.getDataFile();
-
-        if (file.exists()) {
-            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .contentLength(file.length())
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"IngredientsLog.json\"")
-                    .body(resource);
-
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+        InputStreamResource inputStreamResource = filesIngredientsService.exportFileIngredient();
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_JSON)
+                .contentLength(file.length())
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"RecipesLog.json\"")
+                .body(inputStreamResource);
     }
-    @PostMapping(value = "/export",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Void> uploadDataFile(@RequestParam MultipartFile file) {
-        filesIngredientsService.cleanDataFile();
-        File dataFile = filesIngredientsService.getDataFile();
-
-        try (FileOutputStream fos = new FileOutputStream(dataFile)) {
-
-            IOUtils.copy(file.getInputStream(),fos);
-            return ResponseEntity.ok().build();
-        } catch (IOException e) {
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(description = "Импорт файла ингридиентов")
+    public ResponseEntity<Void> uploadDataFile(@RequestParam MultipartFile file) throws FileNotFoundException {
+        filesIngredientsService.importFileIngredient(file);
+        return ResponseEntity.ok().build();
     }
 }
-
 

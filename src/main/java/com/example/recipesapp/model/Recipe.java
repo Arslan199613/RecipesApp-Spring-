@@ -1,13 +1,8 @@
 package com.example.recipesapp.model;
 import lombok.*;
-import org.springframework.validation.annotation.Validated;
-
-import javax.validation.Valid;
 import javax.validation.constraints.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 @Data
 @AllArgsConstructor
@@ -15,7 +10,7 @@ import java.util.Map;
 @EqualsAndHashCode
 public class Recipe {
 
-    @NotBlank
+    @NotBlank(message = "Имя не может быть пустым")
     private String name;
     @Positive
     private int time;
@@ -23,6 +18,8 @@ public class Recipe {
     List<Ingredient> list;
     @NotEmpty
     List<String> steps;
+
 }
+
 
 

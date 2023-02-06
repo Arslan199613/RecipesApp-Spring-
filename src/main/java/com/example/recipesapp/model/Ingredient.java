@@ -1,6 +1,5 @@
 package com.example.recipesapp.model;
 import lombok.*;
-
 import javax.validation.constraints.*;
 
 @Data
